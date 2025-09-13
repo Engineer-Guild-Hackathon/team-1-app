@@ -18,13 +18,13 @@ If you are developing a production application, we recommend using TypeScript wi
 ---
 
 ## チーム情報
-- チーム番号: （ここに記入）
-- チーム名: （ここに記入）
-- プロダクト名: （ここに記入）
-- メンバー: （GitHubアカウントまたは名前を列挙）
+- チーム番号: 1
+- チーム名: ONE
+- プロダクト名: LightPath AI
+- メンバー: yo012412, rei-ouyang
 
 ---
 
 ## デモ　/ プレゼン資料
-- デモURL: 
-- プレゼンURL：
+- デモURL: https://enamel-cache-59679575.figma.site
+- プレゼンURL：https://www.canva.com/design/DAGy0BZh49Y/jxugVyg4-0S2V_rknnLdGw/view?utm_content=DAGy0BZh49Y&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h8d381fc097
