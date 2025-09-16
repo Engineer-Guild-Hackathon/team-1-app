@@ -1,0 +1,26 @@
+# 使用するDocker Composeのバージョン
+version: '3.8'
+
+# 起動するコンテナの定義
+services:
+  # サービス名（ここでは "db" とします）
+  db:
+    # 使用するDockerイメージ（ここではPostgreSQLのバージョン15）
+    image: postgres:15
+    # コンテナを常に再起動する設定
+    restart: always
+    # コンテナの環境変数（データベースのユーザー名やパスワードを設定）
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    # ポートのマッピング（「自分のPCのポート:コンテナのポート」）
+    ports:
+      - '5432:5432'
+    # データの永続化設定（コンテナを消してもデータが残るようにする）
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+# データの永続化に使うボリュームの定義
+volumes:
+  postgres_data:
