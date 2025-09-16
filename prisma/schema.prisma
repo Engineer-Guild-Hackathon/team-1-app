@@ -22,7 +22,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  //relations
+  // relations
   userCource UserCource[]
 
   @@map(name: "users")
@@ -33,11 +33,11 @@ model UserCource {
   userId   String
   courceId String
 
-  //metadata
+  // metadata
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  //relations
+  // relations
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   cource Cource @relation(fields: [courceId], references: [id], onDelete: Cascade)
 }
@@ -47,11 +47,10 @@ model Cource {
   title       String
   description String?
 
-  //metadata
+  // metadata
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  //relations
+  // relations
   userCource UserCource[]
-
 }
