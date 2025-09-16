@@ -1,202 +1,57 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// schema.prisma
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// Define database connection via the `DATABASE_URL` env var
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
 
+// Define custom output path for generated Prisma Client
 generator client {
   provider = "prisma-client-js"
+  output   = "../prisma/generated/prisma-client"
 }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-// アプリケーションの利用者
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
+  id    String  @id @default(cuid())
+  name  String?
+  email String? @unique
+
+  // metadata
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // ユーザーの進捗、テスト結果、タスク、SRSアイテムとの関連
-  progress     UserNodeProgress[]
-  assessments  Assessment[]
-  repairTasks  RepairTask[]
-  srsItems     SRSItem[]
+  //relations
+  userCource UserCource[]
+
+  @@map(name: "users")
 }
 
+model UserCource {
+  id       String @id @default(cuid())
+  userId   String
+  courceId String
 
-// --- 知識グラフ（スキルツリー）関連 ---
+  //metadata
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-// 学習する大きな分野（例：「Pythonデータ分析」）
-model Domain {
-  id          String   @id @default(cuid())
-  name        String   @unique
+  //relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cource Cource @relation(fields: [courceId], references: [id], onDelete: Cascade)
+}
+
+model Cource {
+  id          String  @id @default(cuid())
+  title       String
   description String?
 
-  // この分野に属する知識ノード
-  nodes       KnowledgeNode[]
-}
+  //metadata
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-// スキルツリーの各項目（例：「変数」、「ループ」）
-model KnowledgeNode {
-  id          String @id @default(cuid())
-  title       String
-  description String @db.Text // コンセプトカードの内容
+  //relations
+  userCource UserCource[]
 
-  domainId    String
-  domain      Domain @relation(fields: [domainId], references: [id])
-
-  // 前提知識の定義（自己参照の多対多リレーション）
-  prerequisites KnowledgeNode[] @relation("Prerequisites")
-  unlocks       KnowledgeNode[] @relation("Prerequisites")
-
-  // このノードに関連する問題
-  questions     Question[]
-  // ユーザーごとの進捗
-  userProgress  UserNodeProgress[]
-  // このノードの修復タスク
-  repairTasks   RepairTask[]
-}
-
-
-// --- テストと問題関連 ---
-
-// 各ノードに紐づく問題
-model Question {
-  id          String       @id @default(cuid())
-  text        String       @db.Text
-  type        QuestionType @default(MULTIPLE_CHOICE)
-  explanation String?      @db.Text // 解答後の解説
-
-  knowledgeNodeId String
-  knowledgeNode   KnowledgeNode @relation(fields: [knowledgeNodeId], references: [id])
-
-  // 選択式の問題の場合の選択肢
-  choices     Choice[]
-  // ユーザーの解答履歴
-  userAnswers UserAnswer[]
-  // SRSでの復習対象
-  srsItems    SRSItem[]
-}
-
-// Questionの選択肢
-model Choice {
-  id        String   @id @default(cuid())
-  text      String
-  isCorrect Boolean
-
-  questionId String
-  question   Question @relation(fields: [questionId], references: [id])
-
-  // ユーザーが選択した解答
-  userAnswers UserAnswer[]
-}
-
-// ユーザーが受けたテストのセッション（例：初回テスト）
-model Assessment {
-  id           String       @id @default(cuid())
-  type         AssessmentType @default(INITIAL)
-  createdAt    DateTime     @default(now())
-  completedAt  DateTime?
-
-  userId       String
-  user         User         @relation(fields: [userId], references: [id])
-
-  // このテストセッションでの解答
-  userAnswers  UserAnswer[]
-}
-
-// どのテストで、どの問題に、どう答えたかの記録
-model UserAnswer {
-  id          String   @id @default(cuid())
-  isCorrect   Boolean
-  answeredAt  DateTime @default(now())
-
-  assessmentId    String
-  assessment      Assessment @relation(fields: [assessmentId], references: [id])
-
-  questionId      String
-  question        Question   @relation(fields: [questionId], references: [id])
-
-  selectedChoiceId String?
-  selectedChoice   Choice?    @relation(fields: [selectedChoiceId], references: [id])
-}
-
-
-// --- 学習進捗とタスク関連 ---
-
-// ユーザーと知識ノードごとの進捗を管理する中間テーブル
-model UserNodeProgress {
-  status         NodeStatus @default(NOT_STARTED)
-  lastAssessedAt DateTime   @updatedAt
-
-  userId          String
-  user            User @relation(fields: [userId], references: [id])
-
-  knowledgeNodeId String
-  knowledgeNode   KnowledgeNode @relation(fields: [knowledgeNodeId], references: [id])
-
-  @@id([userId, knowledgeNodeId]) // 複合主キー
-}
-
-// 弱点ノードに対する修復タスク
-model RepairTask {
-  id          String   @id @default(cuid())
-  status      TaskStatus @default(PENDING)
-  createdAt   DateTime @default(now())
-  completedAt DateTime?
-
-  // 実践ミニ課題の提出内容
-  miniProjectSubmission String? @db.Text
-
-  userId          String
-  user            User @relation(fields: [userId], references: [id])
-
-  knowledgeNodeId String
-  knowledgeNode   KnowledgeNode @relation(fields: [knowledgeNodeId], references: [id])
-}
-
-// 間隔反復システム（SRS）の管理
-model SRSItem {
-  id           String   @id @default(cuid())
-  nextReviewAt DateTime // 次回復習する日時
-  interval     Int      // 現在の復習間隔（日数）
-  easeFactor   Float    // 学習の容易さ係数
-
-  userId       String
-  user         User     @relation(fields: [userId], references: [id])
-
-  questionId   String
-  question     Question @relation(fields: [questionId], references: [id])
-
-  @@unique([userId, questionId]) // ユーザーと問題の組み合わせはユニーク
-}
-
-
-// --- ENUM定義（選択肢を固定するための型） ---
-
-enum QuestionType {
-  MULTIPLE_CHOICE
-  FILL_IN_THE_BLANK
-}
-
-enum AssessmentType {
-  INITIAL
-  REPAIR
-  SRS_QUIZ
-}
-
-enum NodeStatus {
-  NOT_STARTED
-  WEAKNESS
-  MASTERED
-}
-
-enum TaskStatus {
-  PENDING
-  COMPLETED
 }
