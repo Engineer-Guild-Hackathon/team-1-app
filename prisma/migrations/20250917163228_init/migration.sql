@@ -21,21 +21,26 @@ CREATE TABLE "public"."UserCource" (
 );
 
 -- CreateTable
-CREATE TABLE "public"."Cource" (
+CREATE TABLE "public"."Course" (
     "id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT,
+    "content" TEXT[],
+    "isFinished" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Cource_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Course_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "public"."users"("email");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "Course_title_key" ON "public"."Course"("title");
+
 -- AddForeignKey
 ALTER TABLE "public"."UserCource" ADD CONSTRAINT "UserCource_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."UserCource" ADD CONSTRAINT "UserCource_courceId_fkey" FOREIGN KEY ("courceId") REFERENCES "public"."Cource"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."UserCource" ADD CONSTRAINT "UserCource_courceId_fkey" FOREIGN KEY ("courceId") REFERENCES "public"."Course"("id") ON DELETE CASCADE ON UPDATE CASCADE;
