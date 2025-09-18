@@ -1,0 +1,143 @@
+version: '3.8'
+
+services:
+  # Main AI service
+  lightup-ai:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - "8001:8001"
+    environment:
+      - AI_SERVICE_PORT=8001
+      - AI_SERVICE_HOST=0.0.0.0
+      - LOG_LEVEL=INFO
+      - ENVIRONMENT=production
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=gpt-4-turbo-preview
+      - NODE_BACKEND_URL=http://lightup-backend:8000
+      - REDIS_URL=redis://redis:6379/0
+      - REDIS_ENABLED=true
+    depends_on:
+      - redis
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - lightup-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Development service
+  lightup-ai-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "8001:8001"
+    environment:
+      - AI_SERVICE_PORT=8001
+      - AI_SERVICE_HOST=0.0.0.0
+      - LOG_LEVEL=DEBUG
+      - ENVIRONMENT=development
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=gpt-4-turbo-preview
+      - NODE_BACKEND_URL=http://localhost:8000
+      - REDIS_URL=redis://redis:6379/0
+      - REDIS_ENABLED=true
+    depends_on:
+      - redis
+    volumes:
+      - .:/app
+      - ./logs:/app/logs
+    networks:
+      - lightup-network
+    profiles:
+      - dev
+
+  # Redis for caching
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - lightup-network
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Testing service
+  lightup-ai-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: testing
+    environment:
+      - ENVIRONMENT=test
+      - LOG_LEVEL=DEBUG
+      - OPENAI_API_KEY=test-key
+    volumes:
+      - .:/app
+    profiles:
+      - test
+    command: python -m pytest tests/ -v --tb=short
+
+  # Load testing service
+  lightup-ai-load-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    environment:
+      - TARGET_URL=http://lightup-ai:8001
+    depends_on:
+      - lightup-ai
+    networks:
+      - lightup-network
+    profiles:
+      - load-test
+    command: >
+      sh -c "
+        echo 'Running load tests...' &&
+        sleep 10 &&
+        python -c '
+        import asyncio
+        import aiohttp
+        import time
+
+        async def load_test():
+            url = \"http://lightup-ai:8001/health\"
+            async with aiohttp.ClientSession() as session:
+                tasks = []
+                for i in range(100):
+                    tasks.append(session.get(url))
+
+                start_time = time.time()
+                responses = await asyncio.gather(*tasks, return_exceptions=True)
+                end_time = time.time()
+
+                success_count = sum(1 for r in responses if hasattr(r, \"status\") and r.status == 200)
+                print(f\"Load test completed: {success_count}/100 successful requests in {end_time - start_time:.2f}s\")
+
+        asyncio.run(load_test())
+        '
+      "
+
+networks:
+  lightup-network:
+    driver: bridge
+
+volumes:
+  redis_data:
+    driver: local

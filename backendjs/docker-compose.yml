@@ -1,0 +1,106 @@
+version: '3.8'
+
+services:
+  # Main application service
+  app:
+    build:
+      context: .
+      target: production
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=file:./data/prod.db
+      - AI_SERVICE_URL=http://ai-service:8001
+      - PORT=8000
+      - LOG_LEVEL=info
+      - CORS_ORIGINS=http://localhost:3000,https://your-frontend-domain.com
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    restart: unless-stopped
+    depends_on:
+      - db-init
+    networks:
+      - lightup-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:8000/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Database initialization service
+  db-init:
+    build:
+      context: .
+      target: base
+    environment:
+      - DATABASE_URL=file:./data/prod.db
+      - NODE_ENV=production
+    volumes:
+      - ./data:/app/data
+    command: >
+      sh -c "
+        npx prisma db push --accept-data-loss &&
+        npm run db:seed
+      "
+    networks:
+      - lightup-network
+
+  # Development service
+  app-dev:
+    build:
+      context: .
+      target: development
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=file:./data/dev.db
+      - AI_SERVICE_URL=http://localhost:8001
+      - PORT=8000
+      - LOG_LEVEL=debug
+      - CORS_ORIGINS=http://localhost:3000
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - ./data:/app/data
+      - ./logs:/app/logs
+    networks:
+      - lightup-network
+    profiles:
+      - dev
+
+  # AI Service placeholder (to be implemented separately)
+  ai-service:
+    image: lightup-ai-service:latest
+    ports:
+      - "8001:8001"
+    environment:
+      - PORT=8001
+      - MODEL_PATH=/models
+    volumes:
+      - ./ai-models:/models
+    restart: unless-stopped
+    networks:
+      - lightup-network
+    profiles:
+      - with-ai
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  lightup-network:
+    driver: bridge
+
+volumes:
+  data:
+    driver: local
+  logs:
+    driver: local
+  ai-models:
+    driver: local
