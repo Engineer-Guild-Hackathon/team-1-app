@@ -9,7 +9,7 @@ WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
-COPY prisma ./prisma/
+COPY ../prisma ./prisma/
 
 # Install dependencies
 RUN npm ci --only=production && npm cache clean --force
@@ -62,7 +62,7 @@ RUN adduser --system --uid 1001 lightup
 
 # Copy package files
 COPY package*.json ./
-COPY prisma ./prisma/
+COPY ../prisma ./prisma/
 
 # Install production dependencies
 RUN npm ci --only=production && npm cache clean --force

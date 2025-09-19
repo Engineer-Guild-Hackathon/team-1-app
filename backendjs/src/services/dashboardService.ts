@@ -1,7 +1,7 @@
-import { prisma } from '../utils/prisma';
-import { logger } from '../utils/logger';
-import { NotFoundError } from '../middleware/errorHandler';
-import { HeatmapData, ProgressStats, NodeStats, WeeklyTrend } from '../types';
+import { prisma } from '@/utils/prisma';
+import { logger } from '@/utils/logger';
+import { NotFoundError } from '@/middleware/errorHandler';
+import { HeatmapData, ProgressStats, NodeStats, WeeklyTrend } from '@/types';
 
 export class DashboardService {
   async getDashboardData(userCourseId: string): Promise<{

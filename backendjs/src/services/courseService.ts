@@ -1,8 +1,8 @@
-import { prisma } from '../utils/prisma';
+import { prisma } from '@/utils/prisma';
 import { aiService } from './aiService';
-import { logger } from '../utils/logger';
-import { NotFoundError, ConflictError } from '../middleware/errorHandler';
-import { CourseInfo, ProgressSummary } from '../types';
+import { logger } from '@/utils/logger';
+import { NotFoundError, ConflictError } from '@/middleware/errorHandler';
+import { CourseInfo, ProgressSummary } from '@/types';
 
 export class CourseService {
   async getPresetCourses(): Promise<CourseInfo[]> {

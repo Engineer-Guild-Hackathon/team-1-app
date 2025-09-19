@@ -1,9 +1,9 @@
-import { prisma } from '../utils/prisma';
+import { prisma } from '@/utils/prisma';
 import { aiService } from './aiService';
 import { roadmapService } from './roadmapService';
-import { logger } from '../utils/logger';
-import { NotFoundError } from '../middleware/errorHandler';
-import { StudyPlanPreferences, StudyDay, StudyPlanSummary } from '../types';
+import { logger } from '@/utils/logger';
+import { NotFoundError } from '@/middleware/errorHandler';
+import { StudyPlanPreferences, StudyDay, StudyPlanSummary } from '@/types';
 
 export class StudyPlanService {
   async generateStudyPlan(

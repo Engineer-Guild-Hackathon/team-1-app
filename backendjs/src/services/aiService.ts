@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
-import { config } from '../config';
-import { logger } from '../utils/logger';
-import { ExternalServiceError } from '../middleware/errorHandler';
+import { config } from '@/config';
+import { logger } from '@/utils/logger';
+import { ExternalServiceError } from '@/middleware/errorHandler';
 import {
   AIRoadmapRequest,
   AIAssessmentRequest,
@@ -10,7 +10,7 @@ import {
   AssessmentQuestion,
   StudyDay,
   StudyPlanSummary,
-} from '../types';
+} from '@/types';
 
 class AIService {
   private client: AxiosInstance;

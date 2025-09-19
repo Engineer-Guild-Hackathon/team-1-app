@@ -1,7 +1,7 @@
-import { prisma } from '../utils/prisma';
-import { logger } from '../utils/logger';
-import { NotFoundError } from '../middleware/errorHandler';
-import { RoadmapData, NodeProgress } from '../types';
+import { prisma } from '@/utils/prisma';
+import { logger } from '@/utils/logger';
+import { NotFoundError } from '@/middleware/errorHandler';
+import { RoadmapData, NodeProgress } from '@/types';
 
 export class RoadmapService {
   async getRoadmap(courseId: string): Promise<RoadmapData> {

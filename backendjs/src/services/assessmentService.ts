@@ -1,8 +1,8 @@
-import { prisma } from '../utils/prisma';
+import { prisma } from '@/utils/prisma';
 import { aiService } from './aiService';
-import { logger } from '../utils/logger';
-import { NotFoundError, BadRequestError } from '../middleware/errorHandler';
-import { DifficultyLevel, AssessmentQuestion, AssessmentAnswer, NodeScore } from '../types';
+import { logger } from '@/utils/logger';
+import { NotFoundError, BadRequestError } from '@/middleware/errorHandler';
+import { DifficultyLevel, AssessmentQuestion, AssessmentAnswer, NodeScore } from '@/types';
 
 export class AssessmentService {
   async generateAssessment(

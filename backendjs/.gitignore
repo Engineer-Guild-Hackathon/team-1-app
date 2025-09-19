@@ -98,7 +98,7 @@ prod.db*
 
 # Prisma
 .env
-prisma/migrations/migration_lock.toml
+../prisma/migrations/migration_lock.toml
 
 # IDE and editor files
 .vscode/
