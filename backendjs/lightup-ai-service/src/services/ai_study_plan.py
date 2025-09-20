@@ -272,7 +272,7 @@ class AIStudyPlanService:
     def _validate_study_plan_request(self, request: StudyPlanRequest) -> None:
         """Validate the study plan request."""
         if not request.roadmap.nodes:
-            raise ValueError("Roadmap must contain at least one node")
+            raise ValueError("RoadmapDisplay must contain at least one node")
 
         if request.time_constraints.target_days < 1:
             raise ValueError("Target days must be at least 1")

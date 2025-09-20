@@ -15,7 +15,7 @@ export class RoadmapService {
     });
 
     if (!roadmap) {
-      throw new NotFoundError('Roadmap not found for this course');
+      throw new NotFoundError('RoadmapDisplay not found for this course');
     }
 
     const graphData = roadmap.graphData as RoadmapData;

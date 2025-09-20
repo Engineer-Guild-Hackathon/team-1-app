@@ -16,7 +16,7 @@ An AI-powered microservice for the LightUp learning platform, providing intellig
 - **Progress Adaptation**: Adjust plans based on user feedback and performance
 - **Learning Style Awareness**: Customize activities for different learning preferences
 
-### 🗺️ **Learning Roadmap Generation**
+### 🗺️ **Learning RoadmapDisplay Generation**
 - **Intelligent Sequencing**: Create logical learning progressions
 - **Prerequisite Management**: Automatic dependency resolution
 - **Visual Layouts**: Generate optimal node positioning for visualization
@@ -141,7 +141,7 @@ GET  /ai/study-plan/{plan_id}/summary
 GET  /ai/study-plan/{plan_id}/calendar
 ```
 
-### Roadmap Endpoints
+### RoadmapDisplay Endpoints
 
 ```http
 POST /ai/generate-roadmap
@@ -436,7 +436,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - **Issues**: Report bugs and feature requests on GitHub
 - **Discussions**: Join the community discussions for questions and ideas
 
-## 🔮 Roadmap
+## 🔮 RoadmapDisplay
 
 - [ ] **Advanced AI Models**: Support for Claude, Gemini, and other LLMs
 - [ ] **Real-time Adaptation**: Live plan adjustments based on learning velocity

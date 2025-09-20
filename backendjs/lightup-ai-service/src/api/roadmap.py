@@ -1,4 +1,4 @@
-"""Roadmap API endpoints."""
+"""RoadmapDisplay API endpoints."""
 
 import logging
 from typing import Dict, Any
@@ -32,7 +32,7 @@ async def generate_roadmap(
     and user preferences.
 
     Args:
-        request: Roadmap generation parameters including course details and preferences
+        request: RoadmapDisplay generation parameters including course details and preferences
 
     Returns:
         Generated roadmap with nodes, edges, and metadata
@@ -42,7 +42,7 @@ async def generate_roadmap(
     """
     try:
         logger.info(
-            "Roadmap generation requested",
+            "RoadmapDisplay generation requested",
             extra={
                 "course_title": request.course_title,
                 "target_hours": request.target_hours,
@@ -74,7 +74,7 @@ async def generate_roadmap(
         roadmap = await ai_roadmap_service.generate_roadmap(request)
 
         logger.info(
-            "Roadmap generated successfully",
+            "RoadmapDisplay generated successfully",
             extra={
                 "roadmap_id": roadmap.roadmap_id,
                 "node_count": len(roadmap.nodes),
@@ -86,14 +86,14 @@ async def generate_roadmap(
         return roadmap
 
     except ValueError as e:
-        logger.warning(f"Roadmap generation validation error: {e}")
+        logger.warning(f"RoadmapDisplay generation validation error: {e}")
         raise HTTPException(status_code=400, detail=str(e))
 
     except Exception as e:
-        logger.error(f"Roadmap generation failed: {e}")
+        logger.error(f"RoadmapDisplay generation failed: {e}")
         raise HTTPException(
             status_code=500,
-            detail="Roadmap generation failed. Please try again."
+            detail="RoadmapDisplay generation failed. Please try again."
         )
 
 
@@ -109,7 +109,7 @@ async def validate_roadmap(
     detailed feedback and suggestions for improvement.
 
     Args:
-        request: Roadmap validation parameters including nodes and edges
+        request: RoadmapDisplay validation parameters including nodes and edges
 
     Returns:
         Validation results with issues, suggestions, and quality metrics
@@ -119,7 +119,7 @@ async def validate_roadmap(
     """
     try:
         logger.info(
-            "Roadmap validation requested",
+            "RoadmapDisplay validation requested",
             extra={
                 "node_count": len(request.nodes),
                 "edge_count": len(request.edges),
@@ -144,7 +144,7 @@ async def validate_roadmap(
         validation_result = await ai_roadmap_service.validate_roadmap(request)
 
         logger.info(
-            "Roadmap validation completed",
+            "RoadmapDisplay validation completed",
             extra={
                 "is_valid": validation_result.is_valid,
                 "issue_count": len(validation_result.issues),
@@ -155,14 +155,14 @@ async def validate_roadmap(
         return validation_result
 
     except ValueError as e:
-        logger.warning(f"Roadmap validation error: {e}")
+        logger.warning(f"RoadmapDisplay validation error: {e}")
         raise HTTPException(status_code=400, detail=str(e))
 
     except Exception as e:
-        logger.error(f"Roadmap validation failed: {e}")
+        logger.error(f"RoadmapDisplay validation failed: {e}")
         raise HTTPException(
             status_code=500,
-            detail="Roadmap validation failed. Please try again."
+            detail="RoadmapDisplay validation failed. Please try again."
         )
 
 
@@ -175,7 +175,7 @@ async def get_roadmap(roadmap_id: str) -> Dict[str, Any]:
         roadmap_id: Unique roadmap identifier
 
     Returns:
-        Roadmap details if found in cache
+        RoadmapDisplay details if found in cache
 
     Raises:
         HTTPException: If roadmap not found
@@ -188,7 +188,7 @@ async def get_roadmap(roadmap_id: str) -> Dict[str, Any]:
         if not roadmap:
             raise HTTPException(
                 status_code=404,
-                detail=f"Roadmap {roadmap_id} not found"
+                detail=f"RoadmapDisplay {roadmap_id} not found"
             )
 
         return roadmap.model_dump()
@@ -213,7 +213,7 @@ async def get_roadmap_metrics(roadmap_id: str) -> Dict[str, Any]:
         roadmap_id: Unique roadmap identifier
 
     Returns:
-        Roadmap quality metrics and analysis
+        RoadmapDisplay quality metrics and analysis
 
     Raises:
         HTTPException: If roadmap not found
@@ -225,7 +225,7 @@ async def get_roadmap_metrics(roadmap_id: str) -> Dict[str, Any]:
         if not roadmap:
             raise HTTPException(
                 status_code=404,
-                detail=f"Roadmap {roadmap_id} not found"
+                detail=f"RoadmapDisplay {roadmap_id} not found"
             )
 
         # Calculate metrics using graph analyzer
@@ -263,7 +263,7 @@ async def get_roadmap_visualization(roadmap_id: str) -> Dict[str, Any]:
         roadmap_id: Unique roadmap identifier
 
     Returns:
-        Roadmap visualization data formatted for frontend display
+        RoadmapDisplay visualization data formatted for frontend display
 
     Raises:
         HTTPException: If roadmap not found
@@ -275,7 +275,7 @@ async def get_roadmap_visualization(roadmap_id: str) -> Dict[str, Any]:
         if not roadmap:
             raise HTTPException(
                 status_code=404,
-                detail=f"Roadmap {roadmap_id} not found"
+                detail=f"RoadmapDisplay {roadmap_id} not found"
             )
 
         # Format for visualization
@@ -338,7 +338,7 @@ async def clear_roadmap_cache() -> Dict[str, Any]:
     try:
         stats = ai_roadmap_service.clear_cache()
 
-        logger.info("Roadmap cache cleared", extra=stats)
+        logger.info("RoadmapDisplay cache cleared", extra=stats)
 
         return {
             **stats,

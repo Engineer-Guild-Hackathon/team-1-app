@@ -24,7 +24,7 @@ export interface CourseInfo {
   createdAt: string;
 }
 
-// Roadmap types
+// RoadmapDisplay types
 export interface NodePosition {
   x: number;
   y: number;

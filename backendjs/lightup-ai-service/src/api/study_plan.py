@@ -55,7 +55,7 @@ async def generate_study_plan(
         if not request.roadmap.nodes:
             raise HTTPException(
                 status_code=400,
-                detail="Roadmap must contain at least one knowledge node"
+                detail="RoadmapDisplay must contain at least one knowledge node"
             )
 
         if request.time_constraints.target_days < 1:

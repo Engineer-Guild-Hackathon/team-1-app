@@ -332,6 +332,7 @@ async function main(): Promise<void> {
 
             const demoUserCourse = await prisma.userCourse.create({
                 data: {
+                    id: 'clxjy2qde000008l3fjd9g9z9',
                     sessionId: demoSession.id,
                     courseId: 'python-programming',
                     status: 'active',

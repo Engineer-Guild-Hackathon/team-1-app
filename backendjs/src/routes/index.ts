@@ -67,7 +67,7 @@ router.put('/user-courses/:userCourseId/status', validateRequest(updateUserCours
 router.get('/user-courses/:userCourseId/progress', validateRequest(getUserCourseSchema), courseController.getUserProgress);
 router.put('/user-courses/:userCourseId/node-progress', validateRequest(updateNodeProgressSchema), courseController.updateNodeProgress);
 
-// Roadmap routes
+// RoadmapDisplay routes
 router.get('/roadmaps/:courseId', roadmapController.getRoadmap);
 
 // Assessment routes

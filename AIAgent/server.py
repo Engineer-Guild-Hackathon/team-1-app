@@ -12,7 +12,7 @@ import datetime
 
 load_dotenv()
 
-app = FastAPI(title="Mini Roadmap Agent")
+app = FastAPI(title="Mini RoadmapDisplay Agent")
 
 app.add_middleware(
     CORSMiddleware,
@@ -483,7 +483,7 @@ llm_service = LLMService()
 async def read_root():
     """Serve the main HTML page"""
     with open("index.html", "r") as f:
-        return {"message": "Mini Roadmap Agent API"}
+        return {"message": "Mini RoadmapDisplay Agent API"}
 
 @app.get("/agent/roadmap")
 async def generate_roadmap(topic: str) -> RoadmapResponse:
@@ -535,13 +535,13 @@ async def generate_roadmap(topic: str) -> RoadmapResponse:
             nodes.append(Node(**node))
         edges = [Edge(**edge) for edge in roadmap_data["edges"]]
         
-        add_log("output", "Roadmap generation completed successfully")
+        add_log("output", "RoadmapDisplay generation completed successfully")
         
         # Convert to Pydantic models
         nodes = [Node(**node) for node in roadmap_data["nodes"]]
         edges = [Edge(**edge) for edge in roadmap_data["edges"]]
         
-        add_log("output", "Roadmap generation completed successfully")
+        add_log("output", "RoadmapDisplay generation completed successfully")
         
         return RoadmapResponse(
             topic=topic,
