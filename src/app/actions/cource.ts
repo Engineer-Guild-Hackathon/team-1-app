@@ -7,7 +7,6 @@ export type TCourse = Course;
 
 export async function fetchCourses(): Promise<{ result: boolean; data: TCourse[] }> {
   const courses = await prisma.course.findMany({
-    orderBy: { createdAt: 'asc' as 'asc' },
   });
   return {
     result: true,

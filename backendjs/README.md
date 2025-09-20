@@ -6,7 +6,7 @@ An AI-driven intelligent learning platform backend built with Node.js, TypeScrip
 
 - **User Session Management**: Demo mode with session-based user management
 - **Course Management**: Preset courses and AI-generated custom courses
-- **Intelligent Roadmap Generation**: AI-powered learning path creation
+- **Intelligent RoadmapDisplay Generation**: AI-powered learning path creation
 - **Smart Assessment System**: Adaptive testing with AI evaluation
 - **Personalized Study Plans**: AI-generated study schedules
 - **Learning Analytics**: Progress tracking and dashboard insights
@@ -140,7 +140,7 @@ The application uses SQLite with Prisma ORM. Key models include:
 - **Session**: User sessions (demo mode)
 - **Course**: Learning courses (preset and custom)
 - **UserCourse**: User enrollment in courses
-- **Roadmap**: Learning path structure
+- **RoadmapDisplay**: Learning path structure
 - **KnowledgeNode**: Individual learning units
 - **UserNodeProgress**: User progress on nodes
 - **AssessmentSession**: AI-generated assessments
@@ -203,7 +203,7 @@ CORS_ORIGINS="http://localhost:3000"
 ### AI Service Integration
 
 The backend integrates with a separate Python AI service for:
-- Roadmap generation
+- RoadmapDisplay generation
 - Assessment creation
 - Study plan optimization
 

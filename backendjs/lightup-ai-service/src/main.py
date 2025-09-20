@@ -158,7 +158,7 @@ async def health_check() -> Dict[str, Any]:
 # Include API routers
 app.include_router(assessment.router, prefix="/ai", tags=["Assessment"])
 app.include_router(study_plan.router, prefix="/ai", tags=["Study Plan"])
-app.include_router(roadmap.router, prefix="/ai", tags=["Roadmap"])
+app.include_router(roadmap.router, prefix="/ai", tags=["RoadmapDisplay"])
 
 
 if __name__ == "__main__":

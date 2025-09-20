@@ -1,4 +1,4 @@
-# Mini Roadmap Agent
+# Mini RoadmapDisplay Agent
 
 A prototype web application that generates AI-powered learning roadmaps by searching the web and processing information through Large Language Models. Similar to Manus but simplified for demonstration purposes.
 
@@ -73,11 +73,11 @@ A prototype web application that generates AI-powered learning roadmaps by searc
 1. **Enter a Learning Topic**
    - Type any learning topic in the input field (e.g., "Python basics", "JLPT N1 grammar", "Machine Learning")
    
-2. **Generate Roadmap**
-   - Click "Generate Roadmap" or press Enter
+2. **Generate RoadmapDisplay**
+   - Click "Generate RoadmapDisplay" or press Enter
    - Watch the agent logs as it searches and processes information
 
-3. **Interact with the Roadmap**
+3. **Interact with the RoadmapDisplay**
    - **Drag nodes** to rearrange the graph
    - **Click nodes** to toggle between learned/unlearned states
    - **Hover nodes** to see detailed information

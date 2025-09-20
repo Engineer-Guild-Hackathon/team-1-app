@@ -39,7 +39,7 @@ class AIRoadmapService:
         Generate an AI-powered learning roadmap.
 
         Args:
-            request: Roadmap generation request
+            request: RoadmapDisplay generation request
 
         Returns:
             Generated roadmap response
@@ -154,7 +154,7 @@ class AIRoadmapService:
             self.roadmap_cache[cache_key] = response
 
             logger.info(
-                "Roadmap generation completed",
+                "RoadmapDisplay generation completed",
                 extra={
                     "roadmap_id": roadmap_id,
                     "node_count": len(processed_roadmap["nodes"]),
@@ -169,7 +169,7 @@ class AIRoadmapService:
         except Exception as e:
             processing_time = (datetime.utcnow() - start_time).total_seconds()
             logger.error(
-                "Roadmap generation failed",
+                "RoadmapDisplay generation failed",
                 extra={
                     "error": str(e),
                     "processing_time": processing_time,
@@ -186,7 +186,7 @@ class AIRoadmapService:
         Validate a roadmap structure.
 
         Args:
-            request: Roadmap validation request
+            request: RoadmapDisplay validation request
 
         Returns:
             Validation response with issues and suggestions
@@ -229,7 +229,7 @@ class AIRoadmapService:
             )
 
             logger.info(
-                "Roadmap validation completed",
+                "RoadmapDisplay validation completed",
                 extra={
                     "is_valid": is_valid,
                     "issue_count": len(issues),
@@ -242,7 +242,7 @@ class AIRoadmapService:
         except Exception as e:
             processing_time = (datetime.utcnow() - start_time).total_seconds()
             logger.error(
-                "Roadmap validation failed",
+                "RoadmapDisplay validation failed",
                 extra={
                     "error": str(e),
                     "processing_time": processing_time
@@ -344,7 +344,7 @@ class AIRoadmapService:
         })
 
         return {
-            "title": ai_response.get("title", "Generated Learning Roadmap"),
+            "title": ai_response.get("title", "Generated Learning RoadmapDisplay"),
             "nodes": processed_nodes,
             "edges": processed_edges,
             "metadata": metadata
